@@ -63,6 +63,8 @@ typedef enum MessageType
 #define ourInt 32
 
 #define DELIMITER @@@
+#define DELIMITER_LENGHT 3
+
 
 /* TLV_HEADER TYPE */
 typedef enum TLV_TYPE
