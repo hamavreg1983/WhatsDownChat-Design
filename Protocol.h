@@ -1,3 +1,4 @@
+
 /****************************************************
  *  Protocol.h
  *  Created on: 12-7-2017 10:57:48
@@ -10,6 +11,7 @@
 
 #include <stdlib.h>
 #include <sys/types.h>
+#include <netinet/in.h>
 
 /**
  * The Module is apart of Chat app project.
@@ -18,12 +20,24 @@
  */
 
 
+typedef struct sockaddr_in sockaddr_in_t;
+/*
+ * struct sockaddr_in {
+ *     short            sin_family;   // e.g. AF_INET
+ *     unsigned short   sin_port;     // e.g. htons(3490)
+ *     struct in_addr   sin_addr;     // see struct in_addr, below
+ *     char             sin_zero[8];  // zero this if you want to
+ * };
+ */
+
+
+
 /**
  typedef of Message Types
 */
 typedef enum MessageType
 {
-	SIGNUP, 
+	SIGNUP,
 	LOGIN,
 	CREATE_GROUP,
 	ENTER_GROUP,
@@ -104,7 +118,7 @@ typedef struct ClientReceiveMessage
 {
     MessageType m_messageType;
     BackEndStatus m_status;
-    struct sockaddr_in m_groupAdrres;
+    sockaddr_in_t m_groupAdrres;
     char m_GroupName[MAX_MESSAGE_LENGTH];
     size_t m_numberOfGroups;
 } ClientReceiveMessage_t;
@@ -234,7 +248,7 @@ int Protocol_EncodeLogOut_Respond(BackEndStatus _responseStatus, void* _buffer);
  * @param _buffer the buffer in which msg to be send
  * @return on success message length. on fail -1
  */
-int Protoco_EncodeNewGroup_Respond(BackEndStatus _responseStatus, struct sockaddr_in m_groupAdrres, void* _buffer);
+int Protoco_EncodeNewGroup_Respond(BackEndStatus _responseStatus, sockaddr_in_t m_groupAdrres, void* _buffer);
 
 /**
  * @brief encode the response from server-end to front-end of join group respond
@@ -243,7 +257,7 @@ int Protoco_EncodeNewGroup_Respond(BackEndStatus _responseStatus, struct sockadd
  * @param _buffer the buffer in which msg to be send
  * @return on success message length. on fail -1
  */
-int Protocol_EncodeJoinGroup_Respond(BackEndStatus _responseStatus, struct sockaddr_in m_groupAdrres, void* _buffer);
+int Protocol_EncodeJoinGroup_Respond(BackEndStatus _responseStatus, sockaddr_in_t m_groupAdrres, void* _buffer);
 
 /**
  * @brief encode the response from server-end to front-end of leave group respond
@@ -267,3 +281,4 @@ int Protocol_EncodeGetAllGroups_Respond(BackEndStatus _responseStatus, const cha
 
 
 #endif /*_PROTOCOL_H*/
+
