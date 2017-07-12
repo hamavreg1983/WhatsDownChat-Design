@@ -62,7 +62,7 @@ typedef enum MessageType
 
 #define ourInt 32
 
-#define DELIMITER @@@
+#define DELIMITER "@@@"
 #define DELIMITER_LENGHT 3
 
 
