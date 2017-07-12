@@ -23,8 +23,7 @@
 */
 typedef enum MessageType
 {
-
-	SIGNUP, /**/
+	SIGNUP, 
 	LOGIN,
 	CREATE_GROUP,
 	ENTER_GROUP,
@@ -119,7 +118,7 @@ typedef struct ClientReceiveMessage
   * @param void* _buffer - Buffer that in which the message will written
   * @return on success message length. on fail -1
   */
-int Protoco_EncodeNewGroup(const char* _groupName, void* _buffer);
+int Protocol_EncodeNewGroup(const char* _groupName, void* _buffer);
 
  /**
   * @brief The function Encode Message to Protocol format
