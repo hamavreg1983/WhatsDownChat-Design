@@ -149,7 +149,7 @@ int Protocol_EncodeLogIn(const char* _userName, const char* _password, void* _bu
 int Protocol_EncodeLogOut(void* _buffer);
 
  /**
-  * @brief The function Encode Message to Protocol format
+  * @brief The function Encode Message to Protocol formatl
   * @param Char* _newUserName - User Name
   * @param Char* _password - Password
   * @param void* _buffer - Buffer that in which the message will written
@@ -172,7 +172,7 @@ int Protocol_EncodeDeleteUser(void* _buffer);
   * @param ServerReceiveMessage_t* _message - Receive Message that the function fill
   * @return bool on success true 1,  on fail false 0.
   */
-int Protocol_DecodeServer(void* _dataToDecode, size_t _lenght, ServerReceiveMessage_t* _message );
+int Protocol_DecodeServer(void* _dataToDecode, size_t _length, ServerReceiveMessage_t* _message );
 /**
  * @brief The function Decode Message from  Protocol format to ClientReceiveMessage_t form
  * @param void* _dataToDecode - pointer to data that need to decoded
@@ -180,7 +180,7 @@ int Protocol_DecodeServer(void* _dataToDecode, size_t _lenght, ServerReceiveMess
  * @param ClientReceiveMessage_t* _message - Receive Message that the function fill
  * @return bool on success true 1,  on fail false 0.
  */
-int Protocol_DecodeClient(void* _dataToDecode, size_t _lenght, ClientReceiveMessage_t* _message );
+int Protocol_DecodeClient(void* _dataToDecode, size_t _length, ClientReceiveMessage_t* _message );
 
 
 /* ~~~ Response functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
