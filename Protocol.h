@@ -1,4 +1,3 @@
-
 /****************************************************
  *  Protocol.h
  *  Created on: 12-7-2017 10:57:48
@@ -12,6 +11,22 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <netinet/in.h>
+
+
+#define BUFFER_SIZE 1024
+
+#define TLV_TYPE_LENGTH 1
+#define TLV_LENGTH_LENGHT 5
+#define HEADER_LENGTH 6
+#define MAX_MESSAGE_LENGTH 1024
+#define MAX_USERNAME 32
+#define MAX_PASSWORD 32
+#define MAX_GROUP_NAME 32
+#define NAX_IP_LENGTH 16
+#define ourInt 32
+#define DELIMITER "@@@"
+#define DELIMITER_LENGHT 3
+
 
 /**
  * The Module is apart of Chat app project.
@@ -31,69 +46,24 @@ typedef struct sockaddr_in sockaddr_in_t;
  */
 
 
-
-/**
- typedef of Message Types
-*/
+/* define Message types between client server as enum  */
 typedef enum MessageType
 {
-	SIGNUP,
-	LOGIN,
-	CREATE_GROUP,
-	ENTER_GROUP,
-	GET_GROUP_NAMES,
-	GET_ALL_GROUPS,
-	DISCONNECT,
-	LEAVE_GROUP,
-	DELETE_USER
-
+	MESSAGETYPE_RESPONS = 65,
+	MESSAGETYPE_SIGNUP ,
+	MESSAGETYPE_LOGIN,
+	MESSAGETYPE_LOGOUT,
+	MESSAGETYPE_DELETE_USER,
+	MESSAGETYPE_JOIN_GROUP,
+	MESSAGETYPE_CREATE_GROUP,
+	MESSAGETYPE_LEAVE_GROUP,
+	MESSAGETYPE_GET_ALL_GROUPS,
 }MessageType;
 
-#define BUFFER_SIZE 1024
-
-#define TLV_TYPE_LENGTH 1
-#define TLV_LENGTH_LENGHT 5
-#define HEADER_LENGTH 6
-#define MAX_MESSAGE_LENGTH 1024
-#define MAX_USERNAME 32
-#define MAX_PASSWORD 32
-#define MAX_GROUP_NAME 32
-#define NAX_IP_LENGTH 16
-
-#define ourInt 32
-
-#define DELIMITER "@@@"
-#define DELIMITER_LENGHT 3
-
-
-/* TLV_HEADER TYPE */
-typedef enum TLV_TYPE
-{
-	TLV_RESPONS = 1,
-	TLV_SIGNUP,
-	TLV_LOGIN,
-	TLV_LOGOUT,
-	TLV_DELETE_USER,
-	TLV_JOIN_GROUP,
-	TLV_ENTER_GROUP,
-	TLV_LEAVE_GROUP,
-	TLV_GET_ALL_GROUPS
-
-} TLV_TYPE;
-
-
-#define TLV_SIGNUP SU
-#define TLV_LOGIN LI
-#define TLV_LOGOUT LO
-#define TLV_DELETE_USER DU
-#define TLV_JOIN_GROUP CG
-#define TLV_ENTER_GROUP JG
-#define TLV_LEAVE_GROUP LG
-#define TLV_GET_ALL_GROUPS AG
 
 typedef enum BackEndStatus
 {
-	BackEnd_SUCCESS = 0,
+	BackEnd_SUCCESS = 66,
 	BackEnd_SYSTEM_FAIL,
 	BackEnd_UNKNOWN_ERROR,
 	BackEnd_USER_NAME_TAKEN,
@@ -169,7 +139,7 @@ int Protocol_EncodeLeaveGroup(const char* _groupNameToLeave, void* _buffer);
   * @param void* _buffer - Buffer that in which the message will written
   * @return on success message length. on fail -1
   */
-int Protocol_EncodeLogIn(const char* _userName, const char* _password, void* buffer);
+int Protocol_EncodeLogIn(const char* _userName, const char* _password, void* _buffer);
 
  /**
   * @brief The function Encode Message to Protocol format
@@ -200,17 +170,17 @@ int Protocol_EncodeDeleteUser(void* _buffer);
   * @param void* _dataToDecode - pointer to data that need to decoded
   * @param size_t _length - Data length
   * @param ServerReceiveMessage_t* _message - Receive Message that the function fill
-  * @return on success message length. on fail -1
+  * @return bool on success true 1,  on fail false 0.
   */
-bool Protocol_DecodeServer(void* _dataToDecode, size_t _lenght, ServerReceiveMessage_t* _message );
+int Protocol_DecodeServer(void* _dataToDecode, size_t _lenght, ServerReceiveMessage_t* _message );
 /**
  * @brief The function Decode Message from  Protocol format to ClientReceiveMessage_t form
  * @param void* _dataToDecode - pointer to data that need to decoded
  * @param size_t _length - Data length
  * @param ClientReceiveMessage_t* _message - Receive Message that the function fill
- * @return on success message length. on fail -1
+ * @return bool on success true 1,  on fail false 0.
  */
-bool Protocol_DecodeClient(void* _dataToDecode, size_t _lenght, ClientReceiveMessage_t* _message );
+int Protocol_DecodeClient(void* _dataToDecode, size_t _lenght, ClientReceiveMessage_t* _message );
 
 
 /* ~~~ Response functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -220,14 +190,14 @@ bool Protocol_DecodeClient(void* _dataToDecode, size_t _lenght, ClientReceiveMes
  * @param _buffer the buffer in which msg to be send
  * @return on success message length. on fail -1
  */
-int Protocol_EncodeSignUp_Respond(BackEndStatus _responseStatus, void* _buffer);
+int Protocol_EncodeSignUp_Response(BackEndStatus _responseStatus, void* _buffer);
 /**
  * @brief encode the response from server-end to front-end of delete user respond
  * @param _responseStatus ENUM status of back-end result
  * @param _buffer the buffer in which msg to be send
  * @return on success message length. on fail -1
  */
-int Protocol_EncodeDeleteUser_Respond(BackEndStatus _responseStatus, void* _buffer);
+int Protocol_EncodeDeleteUser_Response(BackEndStatus _responseStatus, void* _buffer);
 
 /**
  * @brief encode the response from server-end to front-end of log-in respond
@@ -235,7 +205,7 @@ int Protocol_EncodeDeleteUser_Respond(BackEndStatus _responseStatus, void* _buff
  * @param _buffer the buffer in which msg to be send
  * @return on success message length. on fail -1
  */
-int Protocol_EncodeLogIn_Respond(BackEndStatus _responseStatus, void* _buffer);
+int Protocol_EncodeLogIn_Response(BackEndStatus _responseStatus, void* _buffer);
 
 /**
  * @brief encode the response from server-end to front-end of log-out respond
@@ -243,7 +213,7 @@ int Protocol_EncodeLogIn_Respond(BackEndStatus _responseStatus, void* _buffer);
  * @param _buffer the buffer in which msg to be send
  * @return on success message length. on fail -1
  */
-int Protocol_EncodeLogOut_Respond(BackEndStatus _responseStatus, void* _buffer);
+int Protocol_EncodeLogOut_Response(BackEndStatus _responseStatus, void* _buffer);
 
 /**
  * @brief encode the response from server-end to front-end of create new group respond
@@ -252,7 +222,7 @@ int Protocol_EncodeLogOut_Respond(BackEndStatus _responseStatus, void* _buffer);
  * @param _buffer the buffer in which msg to be send
  * @return on success message length. on fail -1
  */
-int Protoco_EncodeNewGroup_Respond(BackEndStatus _responseStatus, sockaddr_in_t m_groupAdrres, void* _buffer);
+int Protocol_EncodeNewGroup_Response(BackEndStatus _responseStatus, sockaddr_in_t m_groupAdrres, void* _buffer);
 
 /**
  * @brief encode the response from server-end to front-end of join group respond
@@ -261,7 +231,7 @@ int Protoco_EncodeNewGroup_Respond(BackEndStatus _responseStatus, sockaddr_in_t 
  * @param _buffer the buffer in which msg to be send
  * @return on success message length. on fail -1
  */
-int Protocol_EncodeJoinGroup_Respond(BackEndStatus _responseStatus, sockaddr_in_t m_groupAdrres, void* _buffer);
+int Protocol_EncodeJoinGroup_Response(BackEndStatus _responseStatus, sockaddr_in_t m_groupAdrres, void* _buffer);
 
 /**
  * @brief encode the response from server-end to front-end of leave group respond
@@ -269,18 +239,18 @@ int Protocol_EncodeJoinGroup_Respond(BackEndStatus _responseStatus, sockaddr_in_
  * @param _buffer the buffer in which msg to be send
  * @return on success message length. on fail -1
  */
-int Protocol_EncodeLeaveGroup_Respond(BackEndStatus _responseStatus, void* _buffer);
+int Protocol_EncodeLeaveGroup_Response(BackEndStatus _responseStatus, void* _buffer);
 
 
 /**
  * @brief encode the response from server-end to front-end of show all group respond
- * @param _responseStatus ENUM status of back-end re
+ * @param _responseStatus ENUM status of back-end response
  * @param _groupsNames a string of groups names devided by \0
  * @param _numGroups the numer of groups in _groupsNames
  * @param _buffer the buffer in which msg to be send
  * @return on success message length. on fail -1
  */
-int Protocol_EncodeGetAllGroups_Respond(BackEndStatus _responseStatus, const char* _groupsNames, size_t _numGroups, void* _buffer);
+int Protocol_EncodeGetAllGroups_Response(BackEndStatus _responseStatus, const char* _groupsNames, size_t _numGroups, void* _buffer);
 
 
 
