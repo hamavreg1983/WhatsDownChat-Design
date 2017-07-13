@@ -25,7 +25,7 @@
 #define NAX_IP_LENGTH 16
 #define ourInt 32
 #define DELIMITER "@@@"
-#define DELIMITER_LENGHT 3
+#define DELIMITER_LENGTH 3
 
 
 /**
